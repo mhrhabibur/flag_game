@@ -1,9 +1,3 @@
-//
-//  ViewController.swift
-//  Flag Game
-//
-//  Created by Habibur Rahman on 8/14/21.
-//
 
 import UIKit
 
@@ -17,6 +11,7 @@ class ViewController: UIViewController {
     var countries = [String]()
     var score = 0
     var correctAnswer = 0
+    var questionAsked = 0
     
     
     override func viewDidLoad() {
@@ -32,6 +27,8 @@ class ViewController: UIViewController {
       
         
         countries += ["estonia", "france", "germany", "ireland", "italy", "monaco", "nigeria", "poland", "russia", "spain", "uk", "us"]
+        
+       
         
         askQuestion()
         
@@ -49,11 +46,27 @@ class ViewController: UIViewController {
         
         title = countries[correctAnswer].uppercased()
         
+        questionAsked += 1
+        
+        if questionAsked > 3 {
+            questionAsked = 0
+            score = 0
+            
+            let ac = UIAlertController(title: "Game Over", message: "You have already asked 3 questions", preferredStyle: .alert)
+   
+            ac.addAction(UIAlertAction(title: "Play Again", style: .default, handler: askQuestion))
+            
+            present(ac, animated: true)
+            
+            
+        }
     }
     
     
     @IBAction func buttonTapped(_ sender: UIButton) {
+        
         var title: String
+        
         if sender.tag == correctAnswer {
             title = "Correct"
             score += 1
@@ -62,10 +75,9 @@ class ViewController: UIViewController {
             score -= 1
         }
         
-        let alertController = UIAlertController(title: title, message: "Your score: \(score)", preferredStyle: .alert)
+        let alertController = UIAlertController(title: title, message: "Questions Asked: \(questionAsked), Your Score is: \(score)", preferredStyle: .alert)
         
-        
-        
+
         alertController.addAction(UIAlertAction(title: "Continue", style: .default, handler: askQuestion))
         
         present(alertController, animated: true)
